@@ -2,7 +2,7 @@ import datetime
 import os
 from io import BytesIO
 
-from PIL import Image
+from PIL import Image, ExifTags
 from django.contrib.auth.models import User
 from django.core.files import File
 from django.db import models
@@ -75,10 +75,17 @@ class InvitationInfo(models.Model):
         return self.user.username
 
     def save(self, *args, **kwargs):
-        #self.title_image = compress_image(self.title_image,512)
+        self.title_image = compress_image(self.title_image,360)
 
         super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        # 객체 삭제 전에 파일 삭제
+        if self.title_image:
+            if os.path.isfile(self.title_image.path):
+                os.remove(self.title_image.path)
+        print("InvitationInfo delete")
+        super().delete(*args, **kwargs)
 
 
 class InvitationGreetingsInfo(models.Model):
@@ -262,7 +269,7 @@ class InvitationGallery(models.Model):
         self.image = imagepath
 
     def save(self, *args, **kwargs):
-        #self.image = compress_image(self.image,512)
+        self.image = compress_image(self.image,360)
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -270,20 +277,43 @@ class InvitationGallery(models.Model):
         if self.image:
             if os.path.isfile(self.image.path):
                 os.remove(self.image.path)
+
+        InvitationGallery("InvitationInfo delete")
         super().delete(*args, **kwargs)
 
 def compress_image(image, width):
     img = Image.open(image)
+
+    # EXIF 데이터로 이미지 회전 정보 확인 및 적용
+    try:
+        for orientation in ExifTags.TAGS.keys():
+            if ExifTags.TAGS[orientation] == "Orientation":
+                break
+        exif = img._getexif()
+        if exif is not None:
+            orientation_value = exif.get(orientation, None)
+            if orientation_value == 3:
+                img = img.rotate(180, expand=True)
+            elif orientation_value == 6:
+                img = img.rotate(270, expand=True)
+            elif orientation_value == 8:
+                img = img.rotate(90, expand=True)
+    except Exception as e:
+        print(f"EXIF 처리 중 오류 발생: {e}")
+
+    # 이미지 모드 확인 및 RGB 변환
     if img.mode != "RGB":
         img = img.convert("RGB")
-    img_output = BytesIO()
 
+    # 압축 및 리사이즈
+    img_output = BytesIO()
     src_width, src_height = img.size
     src_ratio = float(src_height) / float(src_width)
     dst_height = round(src_ratio * width)
 
     img = img.resize((width, dst_height))
+    img.save(img_output, 'JPEG', quality=70)
 
-    img.save(img_output, 'JPEG', quality=80)
+    # Django File 객체로 변환
     compressed_image = File(img_output, name=image.name)
     return compressed_image

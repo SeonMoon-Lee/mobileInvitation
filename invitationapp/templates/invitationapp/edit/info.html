@@ -37,7 +37,7 @@
         {% if baseinfo.title_image %}
         <img id="preview" src="{{ baseinfo.title_image.url }}" style="width:100%; height:auto; max-width:160px"/>
         {% else %}
-        <img id="preview" style="width:100%; height:auto"/>
+        <img id="preview" style="width:100%; height:auto; max-width:160px"/>
         {% endif %}
         <br>
         <input class="form-control" style="align:center" type="file" name="title_image" accept="image/png, image/jpeg" onchange="readURL(this);">
