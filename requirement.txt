@@ -4,6 +4,8 @@ bleach==6.1.0
 Django==5.0.7
 django-bootstrap4==24.3
 django-summernote==0.8.20.0
+gunicorn==23.0.0
+packaging==24.2
 pillow==10.4.0
 six==1.16.0
 soupsieve==2.5
