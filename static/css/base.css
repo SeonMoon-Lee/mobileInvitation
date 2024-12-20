@@ -36,6 +36,7 @@ footer{
 }
 
 .editor-body  {
+    text-align: center;
     justify-content: center;
     align-items: center;
     height: 80vh;
@@ -45,7 +46,6 @@ footer{
 .editor-layout {
     display: flex;
     width: 100%;
-    max-width: 1200px;
     height: 100%;
     background: #fff;
     border-radius: 10px;
@@ -55,7 +55,7 @@ footer{
 
 /* 프리뷰 영역 */
 .preview {
-    max-width: 514px;
+    max-width: 420px;
     /* flex: 0.7; 프리뷰 영역이 더 넓음 */
     background: #fafafa;
     padding: 20px;
@@ -70,8 +70,9 @@ footer{
 }
 
 .preview-content {
+    max-width: 360px;
     border: 1px dashed #ccc;
-    padding: 20px;
+
     border-radius: 5px;
     background: #fff;
     min-height: 300px;
