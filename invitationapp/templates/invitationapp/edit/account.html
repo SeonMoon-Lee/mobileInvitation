@@ -1,0 +1,92 @@
+<div class="container mt-3 mb-3">
+    <div class="title"> 계좌 정보 </div>
+    {% if accountinfo %}
+    <div>
+        <h5>신랑 정보</h5>
+        <div class="input-group">
+            <span class="input-group-text">신랑님</span>
+            <input class="form-control" type="text" name="husband_bank" placeholder="은행" value = {{ accountinfo.husband_bank }}>
+            <input class="form-control" type="text" name="husband_account" placeholder="계좌 번호" value = {{ accountinfo.husband_account }}>
+            <input class="form-control" type="text" name="husband_depositor" placeholder="예금주" value = {{ accountinfo.husband_depositor }}>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">아버지</span>
+            <input class="form-control" type="text" name="husband_father_bank" placeholder="은행" value = {{ accountinfo.husband_father_bank }}>
+            <input class="form-control" type="text" name="husband_father_account" placeholder="계좌 번호" value = {{ accountinfo.husband_father_account }}>
+            <input class="form-control" type="text" name="husband_father_depositor" placeholder="예금주" value = {{ accountinfo.husband_father_depositor }}>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">어머니</span>
+            <input class="form-control" type="text" name="husband_mother_bank" placeholder="은행" value = {{ accountinfo.husband_mother_bank }}>
+            <input class="form-control" type="text" name="husband_mother_account" placeholder="계좌 번호" value = {{ accountinfo.husband_mother_account }}>
+            <input class="form-control" type="text" name="husband_mother_depositor" placeholder="예금주" value = {{ accountinfo.husband_mother_depositor }}>
+        </div>
+    </div>
+    <div>
+        <h5>신부 정보</h5>
+        <div class="input-group">
+            <span class="input-group-text">신부님</span>
+            <input class="form-control" type="text" name="wife_bank" placeholder="은행" value = {{ accountinfo.wife_bank }}>
+            <input class="form-control" type="text" name="wife_account" placeholder="계좌 번호" value = {{ accountinfo.wife_account }}>
+            <input class="form-control" type="text" name="wife_depositor" placeholder="예금주" value = {{ accountinfo.wife_depositor }}>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">아버지</span>
+            <input class="form-control" type="text" name="wife_father_bank" placeholder="은행" value = {{ accountinfo.wife_father_bank }}>
+            <input class="form-control" type="text" name="wife_father_account" placeholder="계좌 번호" value = {{ accountinfo.wife_father_account }}>
+            <input class="form-control" type="text" name="wife_father_depositor" placeholder="예금주" value = {{ accountinfo.wife_father_depositor }}>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">어머니</span>
+            <input class="form-control" type="text" name="wife_mother_bank" placeholder="은행" value = {{ accountinfo.wife_mother_bank }}>
+            <input class="form-control" type="text" name="wife_mother_account" placeholder="계좌 번호" value = {{ accountinfo.wife_mother_account }}>
+            <input class="form-control" type="text" name="wife_mother_depositor" placeholder="예금주" value = {{ accountinfo.wife_mother_depositor }}>
+        </div>
+
+    </div>
+    {% else %}
+    <div>
+        <h5>신랑 정보</h5>
+        <div class="input-group">
+            <span class="input-group-text">신랑님</span>
+            <input class="form-control" type="text" name="husband_bank" placeholder="은행">
+            <input class="form-control" type="text" name="husband_account" placeholder="계좌 번호">
+            <input class="form-control" type="text" name="husband_depositor" placeholder="예금주">
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">아버지</span>
+            <input class="form-control" type="text" name="husband_father_bank" placeholder="은행">
+            <input class="form-control" type="text" name="husband_father_account" placeholder="계좌 번호">
+            <input class="form-control" type="text" name="husband_father_depositor" placeholder="예금주">
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">어머니</span>
+            <input class="form-control" type="text" name="husband_mother_bank" placeholder="은행">
+            <input class="form-control" type="text" name="husband_mother_account" placeholder="계좌 번호">
+            <input class="form-control" type="text" name="husband_mother_depositor" placeholder="예금주">
+        </div>
+    </div>
+    <div>
+        <h5>신부 정보</h5>
+        <div class="input-group">
+            <span class="input-group-text">신부님</span>
+            <input class="form-control" type="text" name="wife_bank" placeholder="은행">
+            <input class="form-control" type="text" name="wife_account" placeholder="계좌 번호">
+            <input class="form-control" type="text" name="wife_depositor" placeholder="예금주">
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">아버지</span>
+            <input class="form-control" type="text" name="wife_father_bank" placeholder="은행">
+            <input class="form-control" type="text" name="wife_father_account" placeholder="계좌 번호">
+            <input class="form-control" type="text" name="wife_father_depositor" placeholder="예금주">
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">어머니</span>
+            <input class="form-control" type="text" name="wife_mother_bank" placeholder="은행">
+            <input class="form-control" type="text" name="wife_mother_account" placeholder="계좌 번호">
+            <input class="form-control" type="text" name="wife_mother_depositor" placeholder="예금주">
+        </div>
+
+    </div>
+    {% endif %}
+</div>

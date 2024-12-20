@@ -1,0 +1,47 @@
+
+
+<div align="center" style="margin: 3rem 1rem">
+    <h2>오시는 길</h2>
+    <div id="address" style="display:none">{{locationinfo.address}}</div>
+    <div id="map" style="width:100%; aspect-ratio: 1 / 1; max-width:360px;"></div>
+    <br>
+    <div style="text-align:left">
+        <h4><b>주소</b></h4>
+        {{locationinfo.address}} {{locationinfo.weddinghall_name}}
+    </div>
+    <br>
+    <div style="text-align:left">
+        {{ locationinfo.transportation | safe}}
+    </div>
+</div>
+
+<script>
+    address = "{{locationinfo.address}}";
+    console.log(address);
+    naver.maps.Service.geocode({
+        query: address
+    }, function(status, response) {
+        if (status !== naver.maps.Service.Status.OK) {
+            return alert('Something wrong!');
+        }
+
+        var result = response.v2, // 검색 결과의 컨테이너
+        items = result.addresses; // 검색 결과의 배열
+        console.log(result);
+        // do Something
+
+        var map = new naver.maps.Map('map', {
+            center: new naver.maps.LatLng(items[0].y, items[0].x), // 잠실 롯데월드를 중심으로 하는 지도
+            zoom: 15,
+            maxZoom : 15,
+            minZoom : 15,
+            zoomControl: false,
+            draggable  : false
+        });
+        var marker = new naver.maps.Marker({
+            position: new naver.maps.LatLng(items[0].y, items[0].x),
+            map: map
+        });
+    });
+
+</script>

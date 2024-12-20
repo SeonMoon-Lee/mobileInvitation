@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<div class="wrapper" style="text-align: center; margin: auto 1rem">
+
+    {% include 'invitationapp/view/title.html' %}
+    <hr>
+    {% include 'invitationapp/view/greeting.html' %}
+    <hr>
+    {% include 'invitationapp/view/baseinfo.html' %}
+    <hr>
+    {% include 'invitationapp/view/gallery.html' %}
+    <hr>
+    {% include 'invitationapp/view/location.html' %}
+    <hr>
+
+
+    {% include 'invitationapp/view/account.html' %}
+
+</div>
+
+{% endblock%}

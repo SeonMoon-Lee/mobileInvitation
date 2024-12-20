@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="account_body">
+    <div class="wrapper" style="text-align: center; margin: auto 8rem">
+        <h4>회원 탈퇴</h4>
+
+        <p>회원 탈퇴 시 모든 데이터가 영구적으로 삭제됩니다. 삭제된 데이터는 복구할 수 없습니다.</p>
+
+        <form action="{% url 'accountapp:delete' pk=target_user.pk %}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger rounded-pill col-12 mt-3">
+        </form>
+
+        <h6 style="display:inline"><a href="{% url 'invitationapp:create'%}">취소</a></h6>
+    </div>
+</div>
+
+{% endblock %}

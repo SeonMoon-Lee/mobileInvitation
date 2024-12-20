@@ -1,0 +1,56 @@
+<div class="container">
+    <div class="title"> 연락처 정보 </div>
+    {% if contactinfo %}
+    <label class="m-1">신랑 가족 연락처</label>
+    <div class="input-group m-1" >
+        <span class="input-group-text">신랑님</span>
+        <input class="form-control" type="tel" name="husband_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+                    value={{ contactinfo.husband_tel }} >
+    </div>
+    <div class="input-group m-1" >
+        <span class="input-group-text">아버지</span>
+        <input class="form-control"  type="tel" name="husband_father_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+                    value={{ contactinfo.husband_father_tel }} >
+    </div>
+    <div class="input-group m-1" >
+        <span class="input-group-text">어머니</span>
+        <input class="form-control"  type="tel" name="husband_mother_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+                    value={{ contactinfo.husband_mother_tel }} >
+    </div>
+    <label class="m-1">신부 가족 연락처</label>
+    <div class="input-group m-1">
+        <span class="input-group-text">신부님</span>
+        <input class="form-control" type="tel" name="wife_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+                    value={{ contactinfo.wife_tel }} >
+    </div>
+    <div class="input-group m-1" >
+        <span class="input-group-text">아버지</span>
+        <input class="form-control" type="tel" name="wife_father_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+                   value={{ contactinfo.wife_father_tel }} >
+    </div>
+    <div class="input-group m-1" >
+        <span class="input-group-text">어머니</span>
+        <input class="form-control" type="tel" name="wife_mother_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+                   value={{ contactinfo.wife_mother_tel}} >
+    </div>
+    {% else %}
+    <label for="husband-contact" style="text-align:left">신랑 가족 연락처</label>
+    <div class="input-group m-1" id="husband-contact">
+        <span class="input-group-text">신랑님</span>
+        <input class="form-control" type="tel" name="husband_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" >
+        <span class="input-group-text">아버지</span>
+        <input class="form-control" type="tel" name="husband_father_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"  >
+        <span class="input-group-text">어머니</span>
+        <input class="form-control" type="tel" name="husband_mother_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"  >
+    </div>
+    <label>신부 가족 연락처</label>
+    <div class="input-group m-1">
+        <span class="input-group-text">신부님</span>
+        <input class="form-control" type="tel" name="wife_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"  >
+        <span class="input-group-text">아버지</span>
+        <input class="form-control" type="tel" name="wife_father_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"  >
+        <span class="input-group-text">어머니</span>
+        <input class="form-control" type="tel" name="wife_mother_tel" placeholder="010-0000-0000" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" >
+    </div>
+    {% endif %}
+</div>

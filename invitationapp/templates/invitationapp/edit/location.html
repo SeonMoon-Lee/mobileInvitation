@@ -1,0 +1,174 @@
+<div class="container">
+    <div class="m-1">
+        <div class="title">주소</div>
+          <div class="bl_stack bl_stack--row">
+            <input
+              type="text"
+              class="el_input hp_txt-center"
+              placeholder=""
+              disabled
+              id="zonecode"
+              name="location_1"
+            />
+            <button class="el_btn el_btn--outline hp_shrink-0" id="search-btn" type="button">
+              우편번호 찾기
+            </button>
+          </div>
+          <input
+            type="text"
+            class="el_input"
+            placeholder=""
+            id="roadAddress"
+            name="location_2"
+            value="{{ locationinfo.address|default:'' }}"
+          />
+          <input
+            type="text"
+            class="el_input"
+            placeholder="상세주소를 입력해주세요."
+            id="roadAddressDetail"
+            name="location_3"
+            value="{{ locationinfo.weddinghall_name|default:'' }}"
+          />
+      </div>
+    <div class="title"> 오시는 길 안내 </div>
+    <div class="m-1">
+        {{ locationform.transportation }}
+    </div>
+</div>
+
+
+<style>
+
+    .el_ttl {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .el_result {
+        height: 20px;
+      }
+      .el_btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        outline: unset;
+        border: unset;
+
+        padding: 10px;
+        background: #333333;
+        border-radius: 5px;
+        color: #ffffff;
+
+        font-family: Noto Sans KR;
+        letter-spacing: -0.04em;
+        text-align: left;
+
+        width: fit-content;
+        height: 37px;
+        font-family: Noto Sans KR;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 17px;
+        letter-spacing: -0.04em;
+        text-align: left;
+
+        word-break: keep-all;
+      }
+      .el_btn--outline {
+        background: unset;
+        border: 1px solid #333333;
+        color: #333333;
+        font-family: Noto Sans KR;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 17px;
+        letter-spacing: -0.04em;
+        text-align: left;
+        background-color: #ffffff;
+      }
+      .el_input {
+        padding: 10px;
+        /* max-width: 320px; */
+        width: 100%;
+        height: 37px;
+        border: 1px solid #d4d4d4;
+        border-radius: 5px;
+        color: #333333;
+        background-color: unset;
+
+        font-family: Noto Sans KR;
+        font-size: 12px;
+        font-weight: 300;
+        line-height: 17px;
+        letter-spacing: -0.04em;
+        text-align: left;
+      }
+      .el_input::placeholder {
+        color: #d4d4d4;
+      }
+      .el_input:disabled {
+        background-color: #f0f0f0;
+      }
+    .bl_stack {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .bl_stack--row {
+        flex-direction: row;
+      }
+      .form {
+        margin-bottom: 20px;
+        height: fit-content;
+      }
+      .hp_shrink-0 {
+        flex-shrink: 0;
+      }
+</style>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const elZonecode = document.querySelector("#zonecode");
+        const elRoadAddress = document.querySelector("#roadAddress");
+        const elRoadAddressDetail = document.querySelector("#roadAddressDetail");
+
+        // 주소 검색창 열기 함수
+        const onClickSearch = () => {
+        console.log("주소 검색창 열기 버튼 클릭됨");
+           new daum.Postcode({
+                oncomplete: function (data) {
+                    console.log("주소 검색 결과 완료");
+                    console.log("받은 데이터:", data);
+
+                    // 검색 결과를 해당 필드에 채우기
+                    if (data.zonecode) {
+                        console.log("우편번호:", data.zonecode);
+                        elZonecode.value = data.zonecode;
+                    } else {
+                        console.log("우편번호가 없음");
+                    }
+
+                    if (data.address) {
+                        console.log("도로명 주소:", data.address);
+                        elRoadAddress.value = data.address;
+                    } else {
+                        console.log("도로명 주소가 없음");
+                    }
+                },
+                onclose: function (state) {
+                    console.log("주소 검색창 닫힘:", state);
+                },
+            }).open();
+        };
+
+        // 이벤트 리스너 추가
+        document.querySelector("#search-btn").addEventListener("click", () => {
+            event.preventDefault();
+            onClickSearch();
+        });
+
+        elRoadAddressDetail.addEventListener("change", (e) => {
+          elRoadAddressDetail.value = e.target.value;
+        });
+      });
+    </script>

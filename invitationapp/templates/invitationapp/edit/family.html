@@ -1,0 +1,101 @@
+<div class="container">
+    <div class="title"> 가족 정보 </div>
+
+    <!-- 신랑 정보 -->
+    <div class="input-group m-1">
+        <span class="input-group-text">신랑 부모님</span>
+        {% if failyinfo %}
+        <input class="form-control" type="text" name="husband_father_name" placeholder="아버지 성함" value={{ failyinfo.husband_father_name }}>
+        <div class="input-group-text">
+            <input class="form-check-input mt-0" type="checkbox" name="husband_father_isdead"
+            {% if failyinfo.husband_father_isdead|default:False %}
+            checked
+            {% endif %}>
+            <span>(故)</span>
+        </div>
+        <input class="form-control" type="text" name="husband_mother_name" placeholder="어머니 성함" value={{ failyinfo.husband_mother_name }}>
+        <div class="input-group-text">
+            <input class="form-check-input" type="checkbox" name="husband_mother_isdead"
+            {% if failyinfo.husband_mother_isdead|default:False %}
+            checked
+            {% endif %}>
+            (故)
+        </div>
+        {% else %}
+        <input class="form-control" type="text" name="husband_father_name" placeholder="아버지 성함">
+        <div class="input-group-text">
+            <input class="form-check-input" type="checkbox" name="husband_father_isdead">
+            (故)
+        </div>
+        <input class="form-control" type="text" name="husband_mother_name" placeholder="어머니 성함">
+        <div class="input-group-text">
+            <input class="form-check-input" type="checkbox" name="husband_mother_isdead">
+            (故)
+        </div>
+        {% endif %}
+    </div>
+    <!-- 신부 정보 -->
+    <div class="input-group m-1">
+        <span class="input-group-text">신부 부모님</span>
+        {% if failyinfo %}
+        <input class="form-control" type="text" name="wife_father_name" placeholder="아버지 성함" value={{ failyinfo.wife_father_name }}>
+        <div class="input-group-text">
+            <input class="form-check-input" type="checkbox" name="wife_father_isdead"
+            {% if failyinfo.husband_father_isdead|default:False %}
+            checked
+            {% endif %}>
+            (故)
+        </div>
+        <input class="form-control" type="text" name="wife_mother_name" placeholder="어머니 성함" value={{ failyinfo.wife_mother_name }}>
+        <div class="input-group-text">
+            <input class="form-check-input" type="checkbox" name="wife_mother_isdead"
+            {% if failyinfo.husband_mother_isdead|default:False %}
+            checked
+            {% endif %}>
+            (故)
+        </div>
+        {% else %}
+        <input class="form-control" type="text" name="wife_father_name" placeholder="아버지 성함">
+        <div class="input-group-text">
+            <input class="form-check-input" type="checkbox" name="wife_father_isdead">
+            (故)
+        </div>
+        <input class="form-control" type="text" name="wife_mother_name" placeholder="어머니 성함">
+        <div class="input-group-text">
+            <input class="form-check-input" type="checkbox" name="wife_mother_isdead">
+            (故)
+        <div>
+        {% endif %}
+    </div>
+    <div class="input-group m-1">
+        <span class="input-group-text"> 고인 표시</span>
+        {% if failyinfo %}
+        <div class="input-group-text">
+            <input class="form-check-input" type="radio" name="chrysanthemum_display" value="(故)"
+            {% if not failyinfo.chrysanthemum_display %}
+            checked
+            {% endif %}>
+            <label class="form-check-label">(故)</label>
+        </div>
+        <div class="input-group-text">
+            <input class="form-check-input" type="radio" name="chrysanthemum_display" value="(꽃)"
+            {% if failyinfo.chrysanthemum_display %}
+            checked
+            {% endif %}>
+            <label class="form-check-label">(❀)</label>
+        </div>
+
+        {% else %}
+        <div class="input-group-text">
+            <input class="form-check-input" type="radio" name="chrysanthemum_display" value="(故)">
+
+            <label class="form-check-label">(故)</label>
+        </div>
+        <div class="input-group-text">
+            <input class="form-check-input" type="radio" name="chrysanthemum_display" value="(꽃)">
+
+            <label class="form-check-label">(❀)</label>
+        </div>
+        {% endif %}
+    </div>
+</div>

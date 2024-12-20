@@ -1,0 +1,39 @@
+<div style="margin: 3rem 0rem">
+    <h2>갤러리</h2>
+    <!--선택 이미지-->
+
+    <div id="main_gallery_container" style="display:block">
+        <img id="gallery_image" name="gallery_image" src="{{maingalleryimage.image.url}}"  style="width:90%; height:auto; object-fit: cover;"
+    </div>
+
+    <div class="wrap-vertical" >
+        <!-- 스크롤 리스트 -->
+        <div class="gallery_item">
+        {% for i in gallerylist %}
+            <img src="{{ i.image.url }}"  style="width:80px; height:80px; object-fit: cover;"
+            onclick="zoomin('{{i.image.url}}')"/>
+        {% endfor %}
+        </div>
+    </div>
+
+    <br>
+</div>
+
+<script>
+    function zoomin(url){
+        document.getElementById("gallery_image").src = url;
+    }
+</script>
+<style>
+.wrap-vertical{
+  width: auto;
+  overflow: scroll;
+   /* 가로 스크롤 */
+  overflow: auto;
+  white-space: nowrap;
+  margin: 0.1rem 0rem;
+}
+.wrap-vertical::-webkit-scrollbar{
+    display: none;
+}
+</style>

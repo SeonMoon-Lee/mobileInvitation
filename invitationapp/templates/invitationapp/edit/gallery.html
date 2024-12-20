@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="title"> 갤러리 </div>
+    <div class="wrap-vertical">
+        <!-- 스크롤 리스트 -->
+        <div id="imageContainer">
+            {% for i in gallerylist %}
+            <img src="{{ i.image.url }}" class="img-thumbnail" style="object-fit: cover; width: 128px; height: 128px;" />
+            {% endfor %}
+        </div>
+    </div>
+    <div class="input-group m-1">
+        <input class="form-control" type="file" name="gallery_images" accept="image/png, image/jpeg" multiple="multiple" onchange="imageChange(event);">
+    </div>
+</div>
+
+
+<script>
+function imageChange(event){
+    var uploadWrap = document.querySelector("#imageContainer");
+
+    uploadWrap.innerHTML = '';
+
+    let i = event.target.files.length-1;
+    for(let image of event.target.files){
+
+        const reader = new FileReader();
+        reader.onload = function(event){
+            let img = document.createElement("img");
+            uploadWrap.appendChild(img);
+            img.setAttribute("src", event.target.result);
+            img.setAttribute("class", "img-thumbnail");
+            img.style.cssText = "object-fit : cover; width:128px; height:128px;";
+
+        }
+        reader.readAsDataURL(event.target.files[i--]);
+
+    }
+}
+</script>
+
+<style>
+.wrap-vertical{
+  width: 100%;
+  overflow: scroll;
+   /* 가로 스크롤 */
+  overflow: auto;
+  white-space: nowrap;
+}
+</style>

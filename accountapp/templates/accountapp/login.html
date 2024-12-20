@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<div class="account_body">
+	<div class="wrapper" style="text-align: center; margin: auto 8rem">
+		<h1>로그인</h1>
+		<form action ="" method="post">
+			{% csrf_token %}
+			{% bootstrap_form form %}
+			<input type="submit" class="btn btn-dark rounded-pill col-12 mt-3">
+		</form>
+		<br>
+		<a href="{% url 'accountapp:create' %}">
+			<h6>회원가입</h6>
+		</a>
+
+	</div>
+
+</div>
+{% endblock%}

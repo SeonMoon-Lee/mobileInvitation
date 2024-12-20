@@ -1,0 +1,211 @@
+<div>
+    <div style="margin: 3rem 0rem">
+        <!--신랑 정보-->
+        <div>
+            {% if failyinfo.husband_father_isdead %}
+            <span>
+                {% if not failyinfo.chrysanthemum_display %}
+                (故)
+                {% else %}
+                ❀
+                {% endif %}
+            </span>
+            {% endif %}
+            {{failyinfo.husband_father_name}} ·
+            {% if failyinfo.husband_mother_isdead %}
+            <span>
+                {% if not failyinfo.chrysanthemum_display %}
+                (故)
+                {% else %}
+                ❀
+                {% endif %}
+            </span>
+            {% endif %}
+            {{failyinfo.husband_mother_name}} <span style="font-size:14px">의</span> {{baseinfo.husband_pos}} <span style="font-weight: bold;">{{baseinfo.husband_firstname}}</span>
+        </div>
+        <!--신부 정보-->
+        <div>
+            {% if failyinfo.wife_father_isdead %}
+            <span>
+                {% if not failyinfo.chrysanthemum_display %}
+                (故)
+                {% else %}
+                ❀
+                {% endif %}
+            </span>
+            {% endif %}
+            {{failyinfo.wife_father_name}} ·
+            {% if failyinfo.wife_mother_isdead %}
+            <span>
+                {% if not failyinfo.chrysanthemum_display %}
+                (故)
+                {% else %}
+                ❀
+                {% endif %}
+            </span>
+            {% endif %}{{failyinfo.wife_mother_name}} <span style="font-size:14px">의</span> {{baseinfo.wife_pos}} <span style="font-weight: bold;">{{baseinfo.wife_firstname}}</span>
+        </div>
+    </div>
+    <hr>
+    <div class="calendar" style="margin: 3rem 1rem">
+        <!-- 달력 -->
+        <p class="current-date"></p>
+        <div style="padding-top: 1rem; border: 0.5px solid #d63384;">
+            <ul class="weeks">
+              <li style="color : #DB4455;">일</li>
+              <li>월</li>
+              <li>화</li>
+              <li>수</li>
+              <li>목</li>
+              <li>금</li>
+              <li style="color : #4B89DC;">토</li>
+            </ul>
+            <ul class="days">
+
+            </ul>
+        </div>
+    </div>
+    <div id="d-day-count" style="font-size: 14px; margin: 0rem 1rem"></div>
+    <br>
+</div>
+
+<script>
+const weddingdatetime = "{{baseinfo.wedding_datetime}}";
+console.log(weddingdatetime);
+const date = new Date({{ baseinfo.wedding_datetime|date:"U"|default:"0" }} * 1000-32400000);
+console.log(date);
+const currYear = date.getFullYear(),
+currMonth = date.getMonth();
+const currentDate = document.querySelector('.current-date');
+const daysTag = document.querySelector('.days');
+let lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate();
+let firstDayofMonth = new Date(currYear, currMonth, 1).getDay();
+let lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay();
+let lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate();
+
+const renderCalendar = () => {
+  const currYear = date.getFullYear();
+  const currMonth = date.getMonth(); // 0부터 시작 (1월=0, 12월=11)
+
+  // 현재 달의 마지막 날짜
+  const lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate();
+
+  // 현재 달의 첫 번째 날의 요일
+  const firstDayofMonth = new Date(currYear, currMonth, 1).getDay();
+
+  // 현재 달의 마지막 날의 요일
+  const lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay();
+
+  // 이전 달의 마지막 날짜
+  const lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate();
+
+  // 캘린더 헤더
+  currentDate.innerHTML = `${currYear}년 ${currMonth + 1}월`;
+
+  let liTag = '';
+
+  // 이전 달 날짜 추가
+  for (let i = firstDayofMonth; i > 0; i--) {
+    liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
+  }
+
+  // 현재 달 날짜 추가
+  for (let i = 1; i <= lastDateofMonth; i++) {
+    const isToday =
+      i === date.getDate() &&
+      currMonth === date.getMonth() &&
+      currYear === date.getFullYear()
+        ? 'active'
+        : '';
+
+    let style = '';
+    const newDate = new Date(currYear, currMonth, i);
+    if (newDate.getDay() === 0) style = 'style="color: #DB4455;"'; // 일요일
+    else if (newDate.getDay() === 6) style = 'style="color: #4B89DC;"'; // 토요일
+
+    if (isToday !='')
+        style = 'style="color: #FFFFFF;"'
+
+    liTag += `<li class="${isToday}" ${style}>${i}</li>`;
+  }
+
+  // 다음 달 날짜 추가
+  for (let i = lastDayofMonth; i < 6; i++) {
+    liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`;
+  }
+
+  // 캘린더 렌더링
+  daysTag.innerHTML = liTag;
+};
+renderCalendar();
+
+setInterval(function() {
+  const today = new Date().getTime(); // 현재 시각 (ms)
+  const gap = date.getTime() - today; // 차이를 계산
+  const day = Math.floor(gap / (1000 * 60 * 60 * 24));
+  const hour = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const min = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+  const sec = Math.floor((gap % (1000 * 60)) / 1000);
+
+  document.getElementById("d-day-count").innerHTML =
+    `D-DAY까지 ${day}일 ${hour}시간 ${min}분 ${sec}초 남았습니다.`;
+}, 1000);
+
+function getDayStyle(day) {
+  if (day === 0) return 'style="color: #DB4455;"'; // 일요일
+  if (day === 6) return 'style="color: #4B89DC;"'; // 토요일
+  return '';
+}
+</script>
+
+<style>
+
+.calendar ul {
+  display: flex;
+  list-style: none;
+  flex-wrap: wrap;
+  text-align: center;
+  padding-left : 0;
+  padding-right : 0;
+}
+.calendar .weeks li {
+  font-weight: 500;
+}
+.calendar .days {
+  margin-bottom: 32px;
+}
+.calendar ul li {
+  /*#8*/
+  width: calc(100% / 7);
+  /*#9*/
+  position: relative;
+}
+.calendar .days li {
+  /*#10*/
+  z-index: 1;
+  margin-top: 24px;
+}
+
+/*#11*/
+.days li.inactive {
+  color: #aaa;
+}
+
+.days li.active {
+  color: #fff;
+}
+.calendar .days li::before {
+  position: absolute;
+  content: '';
+  height: 32px;
+  width: 32px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: -1;
+}
+.days li.active::before {
+  background: #d63384;
+}
+</style>

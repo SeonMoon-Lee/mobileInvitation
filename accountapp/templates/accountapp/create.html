@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="account_body">
+    <div class="wrapper" style="text-align: center; margin: auto 8rem">
+        <form action="{% url 'accountapp:create' %}" method="post">
+
+            {% csrf_token %}
+            {% bootstrap_form form %}
+
+            <input type="submit" class="btn btn-dark rounded-pill col-12 mt-3">
+        </form>
+
+        <a class = "m-3" href="{% url 'accountapp:login' %}">
+            <h6>취소</h6>
+        </a>
+
+    </div>
+</div>
+
+{% endblock %}

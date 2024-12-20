@@ -1,0 +1,66 @@
+<div class="container">
+    <div class="title"> 기본 정보 </div>
+    <div>
+
+        <div class="input-group m-1">
+            <span class="input-group-text">신랑 정보</span>
+            {% if baseinfo %}
+            <input class="form-control" type="text" name="husband_lastname" placeholder="성" required value={{ baseinfo.husband_lastname }}>
+            <input class="form-control" type="text" name="husband_firstname" placeholder="이름" required value={{ baseinfo.husband_firstname }}>
+            <input class="form-control" type="text" name="husband_pos" placeholder="관계" value={{ baseinfo.husband_pos }}>
+            <input class="form-control" type="text" name="husband_name_en" placeholder="영문명" required value={{ baseinfo.husband_name_en }}>
+            {% else %}
+            <input class="form-control" type="text" name="husband_lastname" placeholder="성" required>
+            <input class="form-control" type="text" name="husband_firstname" placeholder="이름" required>
+            <input class="form-control" type="text" name="husband_pos" placeholder="관계" >
+            <input class="form-control" type="text" name="husband_name_en" placeholder="영문명" required>
+            {% endif %}
+        </div>
+        <div class="input-group m-1">
+            <span class="input-group-text">신부 정보</span>
+            {% if baseinfo %}
+            <input class="form-control" type="text" name="wife_lastname" placeholder="성" required value={{ baseinfo.wife_lastname }}>
+            <input class="form-control" type="text" name="wife_firstname" placeholder="이름" required value={{ baseinfo.wife_firstname }}>
+            <input class="form-control" type="text" name="wife_pos" placeholder="관계" value={{ baseinfo.wife_pos }}>
+            <input class="form-control" type="text" name="wife_name_en" placeholder="영문명" required value={{ baseinfo.wife_name_en }}>
+            {% else %}
+            <input class="form-control" type="text" name="wife_lastname" required placeholder="성">
+            <input class="form-control" type="text" name="wife_firstname" required placeholder="이름">
+            <input class="form-control" type="text" name="wife_pos" placeholder="관계">
+            <input class="form-control" type="text" name="wife_name_en" required placeholder="영문명">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="input-group m-1">
+        <span class="input-group-text"> 메인 사진</span>
+        {% if baseinfo.title_image %}
+        <img id="preview" src="{{ baseinfo.title_image.url }}" style="width:100%; height:auto; max-width:160px"/>
+        {% else %}
+        <img id="preview" style="width:100%; height:auto"/>
+        {% endif %}
+        <br>
+        <input class="form-control" style="align:center" type="file" name="title_image" accept="image/png, image/jpeg" onchange="readURL(this);">
+    </div>
+    <div class="input-group m-1">
+        <span class="input-group-text">예식 일시</span>
+        {% if baseinfo %}
+        <input class="form-control" type="datetime-local" name="wedding_datetime" value="{{ baseinfo.wedding_datetime | date:'Y-m-d H:i'}}">
+        {% else %}
+        <input class="form-control" type="datetime-local" name="wedding_datetime" required>
+        {% endif %}
+    </div>
+</div>
+<script>
+    function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('preview').src = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  } else {
+    document.getElementById('preview').src = "";
+  }
+}
+</script>

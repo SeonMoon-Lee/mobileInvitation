@@ -1,0 +1,79 @@
+html{
+    margin: 0 auto;
+}
+
+footer{
+
+}
+
+.title{
+    margin: 1rem  0.5rem;
+    font-size: 1rem;
+    font-weight : bold;
+}
+.wrapper {
+    width: 100%; /* 기본 크기: 너비 90% */
+    max-width: 360px; /* 최대 크기: 1200px */
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+
+    overflow: hidden;
+}
+.account_body{
+    display: flex;
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    margin: 0;
+}
+.invitation_body {
+    display: flex;
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    height: 100vh; /* 화면 전체 높이 */
+    margin: 0;
+    background: #f4f4f4;
+}
+
+.editor-body  {
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    margin: 0;
+}
+/* 레이아웃 컨테이너 */
+.editor-layout {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* 프리뷰 영역 */
+.preview {
+    flex: 0.7; /* 프리뷰 영역이 더 넓음 */
+    background: #fafafa;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+}
+
+.preview-content {
+    border: 1px dashed #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    background: #fff;
+    min-height: 300px;
+}
+
+/* 에디터 설정 영역 */
+.editor-settings {
+    flex: 1; /* 설정 영역은 좁게 설정 */
+    background: #f9f9f9;
+    padding: 20px;
+    overflow-y: auto;
+}

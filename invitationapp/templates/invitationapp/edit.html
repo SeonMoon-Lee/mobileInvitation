@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<div style="text-align: center; margin: auto 8rem">
+	<form action ="" method="post" >
+		{% csrf_token %}
+
+		<div class="editor-body">
+			<div class="editor-layout">
+			<!-- 프리뷰 영역 -->
+				<div class="preview">
+					<h2>프리뷰</h2>
+					<div class="preview-content">
+						초대장 미리보기 내용이 여기에 표시됩니다.
+					</div>
+				</div>
+				<div class="editor-settings">
+				{% include 'invitationapp/edit/info.html' %}
+
+				{% include 'invitationapp/edit/greeting.html' %}
+
+				{% include 'invitationapp/edit/family.html' %}
+
+				{% include 'invitationapp/edit/location.html' %}
+
+				{% include 'invitationapp/edit/gallery.html' %}
+
+				{% include 'invitationapp/edit/contact.html' %}
+
+				{% include 'invitationapp/edit/account.html' %}
+				<input type="submit" value="저장" class="btn btn-dark rounded-pill col-12 mt-3">
+				</div>
+
+			</div>
+		</div>
+	</form>
+</div>
+	<a href="{% url 'accountapp:delete' pk=user.pk %}">
+		<h6>회원탈퇴</h6>
+	</a>
+
+<br>
+
+{% endblock%}

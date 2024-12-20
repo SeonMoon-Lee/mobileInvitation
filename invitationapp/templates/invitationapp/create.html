@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<div style="text-align: center; margin: auto 8rem">
+	<form action ="" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+
+		<div class="editor-body">
+			<div class="editor-layout">
+			<!-- 프리뷰 영역 -->
+				<div class="preview">
+					<h6>프리뷰</h6>
+					<div class="preview-content">
+						{% include 'invitationapp/view/title.html' %}
+						<hr>
+						{% include 'invitationapp/view/greeting.html' %}
+						<hr>
+						{% include 'invitationapp/view/baseinfo.html' %}
+						<hr>
+						{% include 'invitationapp/view/gallery.html' %}
+						<hr>
+						{% include 'invitationapp/view/location.html' %}
+						<hr>
+
+
+						{% include 'invitationapp/view/account.html' %}
+					</div>
+					</div>
+				</div>
+				<div class="editor-settings">
+				{% include 'invitationapp/edit/info.html' %}
+
+				{% include 'invitationapp/edit/greeting.html' %}
+
+				{% include 'invitationapp/edit/family.html' %}
+
+				{% include 'invitationapp/edit/location.html' %}
+
+				{% include 'invitationapp/edit/gallery.html' %}
+
+				{% include 'invitationapp/edit/contact.html' %}
+
+				{% include 'invitationapp/edit/account.html' %}
+								<input type="submit" value="저장" class="btn btn-dark rounded-pill col-12 mt-3">
+
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+	<br>
+	<div style="text-align:center">
+		<form action="{% url 'invitationapp:invitation' pk=user.pk %}" method="post">
+			{% csrf_token %}
+			<input type="submit" value="확인하기" class="btn btn-primary rounded-pill col-12" style="width:8rem;"/>
+		</form>
+	</div>
+	<br>
+	<div style="text-align:center">
+		<form action="{% url 'accountapp:logout' %}" method="post">
+			{% csrf_token %}
+			<input type="submit" value="로그아웃" class="btn btn-danger rounded-pill col-12" style="width:8rem;" onclick="return confirmLogout();"/>
+		</form>
+	</div>
+	<div style="text-align:center">
+		<a href="{% url 'accountapp:delete' pk=user.pk %}">
+			<h6>회원탈퇴</h6>
+		</a>
+	</div>
+
+<script>
+    function confirmLogout() {
+        return confirm("로그아웃하시겠습니까? 계정을 안전하게 보호하려면 공용 컴퓨터에서는 꼭 로그아웃하세요.");
+    }
+</script>
+
+{% endblock%}

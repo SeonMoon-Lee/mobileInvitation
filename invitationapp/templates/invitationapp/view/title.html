@@ -1,0 +1,21 @@
+{% load custom_filters %}
+
+<div style="padding-bottom: 0.5rem">
+    <div style="text-align:left; margin-top: 1rem">
+        <h3 style="font-style: italic; padding-left:1rem; margin-bottom:-0.5rem">The Wedding</h3>
+        <div style="font-weight: bold; font-size: 32px; padding-left:1rem">INVITATION</div>
+    </div>
+    {% if baseinfo.title_image %}
+    <img id="title_image" name="title_image" src="{{ baseinfo.title_image.url }}"  style="width:90%;height:auto; margin-top:0rem"/>
+    {% endif %}
+    <div style="text-align:right; margin-top: 0.5rem; padding:0 1rem">
+        <h3 style="font-weight: bold;">{{baseinfo.husband_name_en}} & {{baseinfo.wife_name_en}}</h3>
+        <div style="font-size: 12px;">we would appreciate you to join us un all the celebrations</div>
+        <div style="font-size: 12px;">to make our wedding a memorable event.</div>
+        <hr style="margin-bottom : -0.9rem">
+        <hr>
+        <h6 style="font-style: italic; font-weight: bold; margin: -0.5rem 0rem;">SAVE THE DATE {{baseinfo.wedding_datetime|date:"Y.m.d"}} {{ baseinfo.wedding_datetime|english_weekday }}</h6>
+        <hr style="margin-bottom : -0.9rem">
+        <hr>
+    </div>
+</div>
