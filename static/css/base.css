@@ -55,11 +55,18 @@ footer{
 
 /* 프리뷰 영역 */
 .preview {
-    flex: 0.7; /* 프리뷰 영역이 더 넓음 */
+    max-width: 514px;
+    /* flex: 0.7; 프리뷰 영역이 더 넓음 */
     background: #fafafa;
     padding: 20px;
     border-right: 1px solid #ddd;
     overflow-y: auto;
+    display: none;
+}
+@media screen and (min-width: 1024px) {
+    .preview {
+        display: block;
+    }
 }
 
 .preview-content {
