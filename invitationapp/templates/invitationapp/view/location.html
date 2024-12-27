@@ -83,7 +83,8 @@ naver.maps.Service.geocode({ query: address }, function (status, response) {
 
     // 티맵 네비 버튼
     const tmapButton = document.getElementById("tmapButton");
-    tmapButton.href = `tmap://route?goal=${destinationLatitude},${destinationLongitude}`;
+    tmapButton.href = 'tmap://route?goalname=${destinationName}&goalx=${destinationLatitude}&goaly=${destinationLongitude}';
+
 });
 
 </script>
