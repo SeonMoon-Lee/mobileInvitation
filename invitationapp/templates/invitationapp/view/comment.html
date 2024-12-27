@@ -72,14 +72,23 @@
 <!-- 모달 -->
 <div id="password-modal" class="modal" style="display: none;">
     <div class="modal-content comment-modal">
-        <span class="close-modal">&times;</span>
+        <div style="text-align: right; margin: -0.5rem 0rem;">
+            <span class="close-modal">&times;</span>
+        </div>
         <h2>방명록 삭제</h2>
         <form action="{% url 'invitationapp:deleteComment' pk=pk %}" method="post">
             {% csrf_token %}
-            <label for="password">비밀번호:</label>
-            <input type="password" name="password" id="password" required>
+
+            <div class="form-group">
+                <label for="password" class="form-label m-1">비밀번호</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="비밀번호를 입력하세요" required>
+            </div>
+
             <input type="hidden" name="comment_id" id="comment-id">
-            <button type="submit">삭제</button>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <button type="submit" class="btn btn-danger mt-2">삭제</button>
+            </div>
         </form>
     </div>
 </div>

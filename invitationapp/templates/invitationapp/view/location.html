@@ -32,54 +32,59 @@
 </div>
 
 <script>
-    address = "{{locationinfo.address}}";
+const address = "{{ locationinfo.address }}" || "서울특별시 중구 세종대로 110"; // 기본값 제공
 
-    console.log(address);
-    naver.maps.Service.geocode({
-        query: address
-    }, function(status, response) {
-        if (status !== naver.maps.Service.Status.OK) {
-            return alert('Something wrong!');
-        }
+console.log(address);
 
-        var result = response.v2, // 검색 결과의 컨테이너
-        items = result.addresses; // 검색 결과의 배열
-        console.log(result);
-        // do Something
+naver.maps.Service.geocode({ query: address }, function (status, response) {
+    if (status !== naver.maps.Service.Status.OK) {
+        return alert('주소를 찾을 수 없습니다. 다시 시도해주세요.');
+    }
 
-        var map = new naver.maps.Map('map', {
-            center: new naver.maps.LatLng(items[0].y, items[0].x), // 잠실 롯데월드를 중심으로 하는 지도
-            zoom: 15,
-            maxZoom : 20,
-            minZoom : 10,
-            zoomControl: true,
-            draggable  : true
-        });
-        var marker = new naver.maps.Marker({
-            position: new naver.maps.LatLng(items[0].y, items[0].x),
-            map: map
-        });
+    const result = response.v2; // 검색 결과 컨테이너
+    const items = result.addresses; // 검색 결과 배열
 
-        // 도착지 정보
-        const destinationLatitude = items[0].y; // 도착지 위도
-        const destinationLongitude = items[0].x; // 도착지 경도
-        const destinationName = address; // 도착지 이름 (URL 인코딩)
+    if (!items || items.length === 0) {
+        return alert('검색 결과가 없습니다.');
+    }
 
+    console.log(result);
 
-        // 네이버 지도 버튼
-        const naverMapButton = document.getElementById("naverMapButton");
-        naverMapButton.href = 'nmap://route/car?dlat=${destinationLatitude}&dlng=${destinationLongitude}&dname=${destinationName}'
-
-        // 카카오 네비 버튼
-        const kakaoNaviButton = document.getElementById("kakaoNaviButton");
-        kakaoNaviButton.href = `kakaomap://route?ep=${destinationLatitude},${destinationLongitude}&by=CAR`;
-
-        // 티맵 네비 버튼
-        const tmapButton = document.getElementById("tmapButton");
-        tmapButton.href = `tmap://route?goal=${destinationLatitude},${destinationLongitude}`;
+    // 지도 초기화
+    const latitude = items[0].y; // 위도
+    const longitude = items[0].x; // 경도
+    const map = new naver.maps.Map('map', {
+        center: new naver.maps.LatLng(latitude, longitude),
+        zoom: 15,
+        maxZoom: 20,
+        minZoom: 10,
+        zoomControl: true,
+        draggable: true
     });
 
+    // 마커 추가
+    const marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(latitude, longitude),
+        map: map
+    });
 
+    // 도착지 정보
+    const destinationLatitude = latitude;
+    const destinationLongitude = longitude;
+    const destinationName = encodeURIComponent(address); // URL 인코딩
+
+    // 네이버 지도 버튼
+    const naverMapButton = document.getElementById("naverMapButton");
+    naverMapButton.href = `nmap://route/car?dlat=${destinationLatitude}&dlng=${destinationLongitude}&dname=${destinationName}`;
+
+    // 카카오 네비 버튼
+    const kakaoNaviButton = document.getElementById("kakaoNaviButton");
+    kakaoNaviButton.href = `kakaomap://route?ep=${destinationLatitude},${destinationLongitude}&by=CAR`;
+
+    // 티맵 네비 버튼
+    const tmapButton = document.getElementById("tmapButton");
+    tmapButton.href = `tmap://route?goal=${destinationLatitude},${destinationLongitude}`;
+});
 
 </script>
 <style>

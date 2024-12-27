@@ -8,14 +8,14 @@
 </div>
 
 
-
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" integrity="sha384-DKYJZ8NLiK8MN4/C5P2dtSmLQ4KwPaoqAfyA/DfmEc1VDxu4yyC7wy6K1Hs90nka" crossorigin="anonymous"></script>
 <script>
     // 1. 네이티브 공유하기 (navigator.share)
     document.getElementById('nativeShare').addEventListener('click', async () => {
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: '{{baseinfo.husband_firstname}}♥{{baseinfo.wife_firstname}}',
+                    title: '{{ baseinfo.husband_firstname }}♥{{ baseinfo.wife_firstname }}', // 템플릿 변수 안전하게 출력
                     text: '우리 결혼합니다.',
                     url: window.location.href // 현재 페이지 URL
                 });
@@ -29,14 +29,21 @@
     });
 
     // 2. 카카오톡 공유하기
-    Kakao.init('a9bf7ec47622bad6af9991af3fa8b7da'); // 카카오 앱 키로 초기화
+    // Kakao 초기화
+    if (!Kakao.isInitialized()) {
+        Kakao.init('a9bf7ec47622bad6af9991af3fa8b7da'); // 카카오 앱 키로 초기화
+    }
+
     document.getElementById('kakaoShare').addEventListener('click', () => {
-        Kakao.Link.sendDefault({
+        console.log("카카오 공유");
+
+        // 공유하기 설정
+        Kakao.Share.sendDefault({
             objectType: 'feed',
             content: {
-                title: '{{baseinfo.husband_firstname}}♥{{baseinfo.wife_firstname}}',
+                title: '{{ baseinfo.husband_firstname }}♥{{ baseinfo.wife_firstname }}', // 템플릿 변수 안전하게 출력
                 description: '우리 결혼합니다.',
-                imageUrl: {{baseinfo.title_image.url}}, // 공유 이미지 URL
+                imageUrl: '{{ baseinfo.title_image.url }}', // 템플릿 변수 안전하게 처리
                 link: {
                     mobileWebUrl: window.location.href, // 모바일 링크
                     webUrl: window.location.href // 데스크톱 링크
@@ -51,6 +58,10 @@
                     }
                 }
             ]
+        }).then(() => {
+            console.log('카카오 공유 성공');
+        }).catch((error) => {
+            console.error('카카오 공유 실패:', error);
         });
     });
 </script>
