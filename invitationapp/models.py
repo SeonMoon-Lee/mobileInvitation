@@ -55,9 +55,6 @@ class InvitationInfo(models.Model):
         self.wife_lastname = request.POST["wife_lastname"]
         self.wife_pos = request.POST["wife_pos"]
 
-
-
-
         if request.FILES.get("title_image"):
             if self.title_image:
                 if os.path.isfile(self.title_image.path):
@@ -75,7 +72,7 @@ class InvitationInfo(models.Model):
         return self.user.username
 
     def save(self, *args, **kwargs):
-        self.title_image = compress_image(self.title_image,360)
+        self.title_image = compress_image(self.title_image, 512)
 
         super().save(*args, **kwargs)
 
@@ -150,6 +147,7 @@ class InvitationLocationInfo(models.Model):
     weddinghall_tel = models.CharField(max_length=16, blank=True)
 
     transportation = models.TextField(max_length=1024, blank=True, null=True)
+
     #
     # subway = models.TextField(max_length=1024, blank=True, null=True)
     # bus = models.TextField(max_length=1024, blank=True, null=True)
@@ -269,7 +267,7 @@ class InvitationGallery(models.Model):
         self.image = imagepath
 
     def save(self, *args, **kwargs):
-        self.image = compress_image(self.image,360)
+        self.image = compress_image(self.image, 512)
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -280,6 +278,20 @@ class InvitationGallery(models.Model):
 
         InvitationGallery("InvitationInfo delete")
         super().delete(*args, **kwargs)
+
+
+class InvitationComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    writer = models.CharField(max_length=32, blank=False)
+    password = models.CharField(max_length=32, blank=False)
+    comment = models.TextField(max_length=1024, blank=False, null=False)
+
+    def set(self, request, targetUser):
+        self.user = targetUser
+        self.writer = request.POST["comment_writer"]
+        self.password = request.POST["comment_password"]
+        self.comment = request.POST["comment"]
+
 
 def compress_image(image, width):
     img = Image.open(image)
@@ -312,7 +324,7 @@ def compress_image(image, width):
     dst_height = round(src_ratio * width)
 
     img = img.resize((width, dst_height))
-    img.save(img_output, 'JPEG', quality=70)
+    img.save(img_output, 'JPEG', quality=100)
 
     # Django File 객체로 변환
     compressed_image = File(img_output, name=image.name)

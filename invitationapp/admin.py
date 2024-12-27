@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from invitationapp.models import InvitationInfo, InvitationGreetingsInfo, InvitaionFamilyInfo, InvitationLocationInfo, \
-    InvitationContactInfo, InvitationAccountInfo, InvitationGallery
+    InvitationContactInfo, InvitationAccountInfo, InvitationGallery, InvitationComment
 
 # Register your models here.
 
@@ -12,3 +12,4 @@ admin.site.register(InvitationLocationInfo)
 admin.site.register(InvitationContactInfo)
 admin.site.register(InvitationAccountInfo)
 admin.site.register(InvitationGallery)
+admin.site.register(InvitationComment)

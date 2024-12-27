@@ -1,0 +1,239 @@
+{% load static %}
+<div align="center" style="margin: 3rem 1rem">
+	<h2>예식 일시</h2>
+	<div class="calendar">
+		<!-- 달력 -->
+		<p class="current-month fs-4" style="">
+		</p>
+		<div class="calendar-body" style="padding: 1rem;">
+			<ul class="weeks">
+				<li style="color : #DB4455;">일</li>
+				<li>월</li>
+				<li>화</li>
+				<li>수</li>
+				<li>목</li>
+				<li>금</li>
+				<li style="color : #4B89DC;">토</li>
+			</ul>
+			<ul class="days">
+			</ul>
+		</div>
+		<br>
+		<p class="current-date" style="">
+		</p>
+		<div class="countdown-container">
+			<div class="countdown-card">
+				<span id="days" class="countdown-number">39</span>
+				<span class="countdown-label">DAYS</span>
+			</div>
+			<div class="countdown-card">
+				<span id="hours" class="countdown-number">4</span>
+				<span class="countdown-label">HOURS</span>
+			</div>
+			<div class="countdown-card">
+				<span id="minutes" class="countdown-number">58</span>
+				<span class="countdown-label">MINUTES</span>
+			</div>
+			<div class="countdown-card">
+				<span id="seconds" class="countdown-number">55</span>
+				<span class="countdown-label">SECONDS</span>
+			</div>
+		</div>
+		<br>
+		<div id="d-day-count" style="font-size: 14px; margin: 0rem 0rem">
+		</div>
+	</div>
+</div>
+
+
+<script>
+const weddingdatetime = "{{baseinfo.wedding_datetime}}";
+console.log(weddingdatetime);
+const date = new Date({{ baseinfo.wedding_datetime|date:"U"|default:"0" }} * 1000-32400000);
+console.log(date);
+const currYear = date.getFullYear(),
+currMonth = date.getMonth();
+const currentMonth = document.querySelector('.current-month');
+const currentDate = document.querySelector('.current-date');
+const daysTag = document.querySelector('.days');
+let lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate();
+let firstDayofMonth = new Date(currYear, currMonth, 1).getDay();
+let lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay();
+let lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate();
+
+const renderCalendar = () => {
+  const currYear = date.getFullYear();
+  const currMonth = date.getMonth(); // 0부터 시작 (1월=0, 12월=11)
+
+  // 현재 달의 마지막 날짜
+  const lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate();
+
+  // 현재 달의 첫 번째 날의 요일
+  const firstDayofMonth = new Date(currYear, currMonth, 1).getDay();
+
+  // 현재 달의 마지막 날의 요일
+  const lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay();
+
+  // 이전 달의 마지막 날짜
+  const lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate();
+
+  // 캘린더 헤더
+  currentMonth.innerHTML = `${currMonth + 1}월`;
+  currentDate.innerHTML = `${currYear}. ${currMonth + 1}. ${date.getDate()}`;
+
+  let liTag = '';
+
+  // 이전 달 날짜 추가
+  for (let i = firstDayofMonth; i > 0; i--) {
+    liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
+  }
+
+  // 현재 달 날짜 추가
+  for (let i = 1; i <= lastDateofMonth; i++) {
+    const isToday =
+      i === date.getDate() &&
+      currMonth === date.getMonth() &&
+      currYear === date.getFullYear()
+        ? 'active'
+        : '';
+
+    let style = '';
+    const newDate = new Date(currYear, currMonth, i);
+    if (newDate.getDay() === 0) style = 'style="color: #DB4455;"'; // 일요일
+    else if (newDate.getDay() === 6) style = 'style="color: #4B89DC;"'; // 토요일
+
+    if (isToday !='')
+        style = 'style="color: #FFFFFF;"'
+
+    liTag += `<li class="${isToday}" ${style}>${i}</li>`;
+  }
+
+  // 다음 달 날짜 추가
+  for (let i = lastDayofMonth; i < 6; i++) {
+    liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`;
+  }
+
+  // 캘린더 렌더링
+  daysTag.innerHTML = liTag;
+};
+renderCalendar();
+
+setInterval(function() {
+    const today = new Date().getTime(); // 현재 시각 (ms)
+    const gap = date.getTime() - today; // 차이를 계산
+    const day = Math.floor(gap / (1000 * 60 * 60 * 24));
+    const hour = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const min = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+    const sec = Math.floor((gap % (1000 * 60)) / 1000);
+
+    document.getElementById("days").innerText = day;
+    document.getElementById("hours").innerText = hour;
+    document.getElementById("minutes").innerText = min;
+    document.getElementById("seconds").innerText = sec;
+
+    let husband_name = "{{ baseinfo.husband_firstname }}";
+    let wife_name = "{{ baseinfo.wife_firstname }}";
+
+    document.getElementById("d-day-count").innerHTML = `
+    ${husband_name} <i class="fa-solid fa-heart" style="color: #FFA7A7"></i> ${wife_name}의 결혼식이 ${day}일 남았습니다.`;
+
+}, 1000);
+
+function getDayStyle(day) {
+  if (day === 0) return 'style="color: #DB4455;"'; // 일요일
+  if (day === 6) return 'style="color: #4B89DC;"'; // 토요일
+  return '';
+}
+</script>
+
+<style>
+.calendar-body{
+    background: #FFF5F5;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+}
+
+.calendar ul {
+  display: flex;
+  list-style: none;
+  flex-wrap: wrap;
+  text-align: center;
+  padding-left : 0;
+  padding-right : 0;
+}
+.calendar .weeks li {
+  font-weight: 500;
+}
+.calendar .days {
+  margin-bottom: 1rem;
+}
+.calendar ul li {
+  /*#8*/
+  width: calc(100% / 7);
+  /*#9*/
+  position: relative;
+}
+.calendar .days li {
+  /*#10*/
+  z-index: 1;
+  margin-top: 16px;
+
+}
+
+/*#11*/
+.days li.inactive {
+  color: #aaa;
+}
+
+.days li.active {
+  color: #fff;
+}
+.calendar .days li::before {
+  position: absolute;
+  content: '';
+  height: 32px;
+  width: 32px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: -1;
+}
+.days li.active::before {
+  background: #FFA7A7;
+}
+
+.countdown-container {
+    justify-content: center; /* 가로 방향 중앙 정렬 */
+    align-items: center; /* 세로 방향 중앙 정렬 */
+    display: flex;
+    gap: 16px; /* 카드 간격 */
+}
+
+.countdown-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #FFF5F5;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 16px;
+    width: 64px;
+    height: 80px;
+}
+
+.countdown-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.countdown-label {
+    font-size: 12px;
+    font-weight: 200;
+    color: #aaaaaa;
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+</style>

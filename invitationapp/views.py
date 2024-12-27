@@ -1,3 +1,8 @@
+import base64
+
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
@@ -5,7 +10,7 @@ from django.views.generic import CreateView, UpdateView, DetailView
 
 from invitationapp.forms import CreateViewForm, UpdateViewForm, GreetingsViewForm, LocationViewForm
 from invitationapp.models import InvitationInfo, InvitationGreetingsInfo, InvitaionFamilyInfo, InvitationLocationInfo, \
-    InvitationContactInfo, InvitationAccountInfo, InvitationGallery
+    InvitationContactInfo, InvitationAccountInfo, InvitationGallery, InvitationComment
 
 
 # Create your views here.
@@ -55,7 +60,6 @@ def InvitaionCreate(request):
                 accountinfo = InvitationAccountInfo()
             else:
                 accountinfo = accountlist[0]
-
 
             baseinfo.set(request)
             greetinginfo.set(request)
@@ -191,6 +195,8 @@ def InvitationDetailView(request, pk):
     accountlist = InvitationAccountInfo.objects.filter(user=pk)
     gallerylist = InvitationGallery.objects.filter(user=pk)
 
+    commentlist = InvitationComment.objects.filter(user=pk)
+
     if len(baseinfolist) != 0:
         baseinfo = baseinfolist[0]
     else:
@@ -221,6 +227,11 @@ def InvitationDetailView(request, pk):
     else:
         accountinfo = None
 
+    # 페이지네이터 생성 (5개씩 표시)
+    paginator = Paginator(commentlist, 3)
+    page_number = request.GET.get('page')  # URL의 'page' 파라미터 가져오기
+    page_obj = paginator.get_page(page_number)  # 해당 페이지의 객체 가져오기
+
     context = {
         'baseinfo': baseinfo,
         'greetinginfo': greetinginfo,
@@ -229,12 +240,46 @@ def InvitationDetailView(request, pk):
         'contactinfo': contactinfo,
         'accountinfo': accountinfo,
         'gallerylist': gallerylist,
-
+        'commentlist': commentlist,
+        'pk': pk,
+        'page_obj': page_obj
     }
     if len(gallerylist) != 0:
         context['maingalleryimage'] = gallerylist[0]
+
+    context['isWatermark'] = False
+
     print(gallerylist.first())
     return render(request, 'invitationapp/invitation.html', context)
+
+
+def InvitationCreateComment(request, pk):
+    commentInfo = InvitationComment()
+    user = User.objects.filter(id=pk).first()
+    commentInfo.set(request, user)
+    commentInfo.save()
+
+    return HttpResponseRedirect(reverse('invitationapp:invitation', args=[pk]))
+
+
+def InvitationDeleteComment(request, pk):
+    if request.method == 'POST':
+        cid = request.POST.get("comment_id")
+        password = request.POST.get("password")
+
+        print(cid)
+        print(password)
+
+        commentInfo = InvitationComment.objects.filter(id=cid).first()
+        if commentInfo.user != request.user:
+            if commentInfo.password != password:
+                messages.error(request, "비밀번호가 올바르지 않습니다.")
+                return HttpResponseRedirect(request.path)
+
+        commentInfo.delete()
+        messages.success(request, "방명록이 삭제되었습니다.")
+
+    return HttpResponseRedirect(reverse('invitationapp:invitation', args=[pk]))
 
 #class InvitationCreateView(CreateView):
 #    model = InvitationInfo

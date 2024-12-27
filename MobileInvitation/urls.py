@@ -15,11 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf.urls.static import static
+from django.conf.urls import (
+    handler400, handler404, handler500
+)
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
 from MobileInvitation import settings
+from MobileInvitation.views import custom_page_not_found, error500
 
 urlpatterns = [
     path('', RedirectView.as_view(pattern_name='accountapp:login', permanent=False)),
@@ -31,3 +35,6 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+handler404 = custom_page_not_found

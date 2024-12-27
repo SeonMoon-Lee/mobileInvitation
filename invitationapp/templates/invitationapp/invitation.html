@@ -1,11 +1,20 @@
 {% extends 'main.html' %}
 {% load bootstrap4 %}
 {% block content %}
-<div class="wrapper" style="text-align: center; margin: auto 1rem">
+
+<div class="wrapper" style="text-align: center; margin: auto 1rem; padding-bottom: 1rem">
+
+    <!-- 인트로 화면 -->
+    <div id="intro" class="intro">
+        <p id="intro-text"></p>
+    </div>
+
 
     {% include 'invitationapp/view/title.html' %}
     <hr>
     {% include 'invitationapp/view/greeting.html' %}
+    <hr>
+    {% include 'invitationapp/view/calendar.html' %}
     <hr>
     {% include 'invitationapp/view/baseinfo.html' %}
     <hr>
@@ -13,10 +22,214 @@
     <hr>
     {% include 'invitationapp/view/location.html' %}
     <hr>
-
-
     {% include 'invitationapp/view/account.html' %}
+    <hr>
+    {% include 'invitationapp/view/comment.html' %}
+    <hr>
+    {% include 'invitationapp/view/share.html' %}
 
+    {% if isWatermark %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="purchase-container" id="purchaseContainer">
+
+        <form action="{% url 'invitationapp:invitation' pk=user.pk %}" method="post">
+			{% csrf_token %}
+            <div class="input-group" style="width:100%; margin-bottom:1rem">
+                <span class="input-group-text">주문번호</span>
+                <input class="form-control" type="text" name="purchase_id">
+            </div>
+
+            <button type="submit" id="purchase" class="purchase-btn" style="width: 100%">
+	            <i class="fa-solid fa-cart-shopping"></i>
+                결제하기 </button>
+		</form>
+
+    </div>
+    {% endif %}
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const messages = document.querySelectorAll('.alert');
+
+        messages.forEach((message) => {
+            // 메시지를 5초 후에 제거
+            setTimeout(() => {
+                message.style.transition = 'opacity 0.5s ease-out'; // 사라지는 애니메이션
+                message.style.opacity = '0';
+                setTimeout(() => {
+                    message.remove(); // 완전히 사라진 후 DOM에서 제거
+                }, 500); // 애니메이션 시간 후 삭제
+            }, 5000); // 메시지 표시 시간 (5초)
+        });
+    });
+
+    </script>
+    {% endif %}
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const purchaseContainer = document.getElementById("purchaseContainer");
+    const pageContent = document.querySelector(".page-content");
 
+    const intro = document.getElementById('intro');
+    const introText = document.getElementById('intro-text');
+
+    const typingText = "Welcome to our wedding!";
+    let index = 0;
+
+    function adjustPagePadding() {
+        const containerHeight = purchaseContainer.offsetHeight;
+
+        // purchase-container 높이만큼 추가 여백 설정
+        pageContent.style.paddingBottom = `${containerHeight}px`;
+    }
+
+    function togglePurchaseContainerPosition() {
+        const scrollPosition = window.scrollY + window.innerHeight; // 현재 스크롤 위치 + 화면 높이
+        const documentHeight = document.documentElement.scrollHeight; // 문서 전체 높이
+
+        if (scrollPosition >= documentHeight) {
+            // 최하단에 도달
+            purchaseContainer.classList.add("static");
+        } else {
+            // 최하단이 아닐 때
+            purchaseContainer.classList.remove("static");
+        }
+    }
+
+    // 타이핑 애니메이션 함수
+    const type = () => {
+        if (index < typingText.length) {
+            introText.textContent += typingText[index];
+            index++;
+            setTimeout(type, 64); // 글자 간격 속도
+        } else {
+            setTimeout(() => {
+                fadeOutIntro();
+            }, 1000); // 타이핑 완료 후 딜레이
+        }
+    };
+
+    // 인트로 페이드 아웃
+    const fadeOutIntro = () => {
+        intro.style.opacity = 0;
+        setTimeout(() => {
+            intro.style.display = 'none'; // 인트로 제거
+        }, 1000); // 페이드 아웃 속도와 동일
+    };
+
+    // 타이핑 애니메이션 시작
+    type();
+
+    // 초기 설정
+    adjustPagePadding();
+    togglePurchaseContainerPosition();
+
+    // 이벤트 리스너 등록
+    window.addEventListener("resize", adjustPagePadding); // 창 크기 조정 시
+    window.addEventListener("scroll", togglePurchaseContainerPosition); // 스크롤 시
+
+
+});
+
+
+</script>
+<style>
+.purchase-container {
+    position: fixed; /* 기본: 화면 하단에 고정 */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    z-index: 9999;
+    transition: position 0.3s, bottom 0.3s; /* 부드러운 전환 효과 */
+}
+
+.purchase-container.static {
+    position: static; /* 최하단에 도달하면 정적으로 전환 */
+    box-shadow: none; /* 그림자 제거 */
+}
+
+.purchase-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.purchase-btn {
+        padding: 12px 16px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+    }
+/* 인트로 스타일 */
+.intro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 0;
+    width: 100%;
+    max-width:360px;
+    height: 100%;
+    background-color: #FFF5F5;
+    color: black;
+    z-index: 9999;
+    font-size: 3vmin;
+    text-align: center;
+    opacity: 0.8;
+    transition: opacity 1s ease-in-out;
+}
+.messages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 0;
+    width: 300px;
+    z-index: 1000;
+}
+
+.alert {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+}
+
+.alert.success {
+    background-color: #4caf50;
+}
+
+.alert.error {
+    background-color: #f44336;
+}
+
+.alert.warning {
+    background-color: #ff9800;
+}
+
+.alert.info {
+    background-color: #2196f3;
+}
+</style>
 {% endblock%}
+

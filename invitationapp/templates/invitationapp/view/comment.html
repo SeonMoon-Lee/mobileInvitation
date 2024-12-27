@@ -1,0 +1,189 @@
+<div style="margin: 2rem 1rem;">
+	<div>
+        <h2>방명록</h2>
+        <div style="font-size:0.75rem; color:gray">저희 둘에게 따뜻한 방명록을 남겨주세요</div>
+        <div class="comment-list">
+			 {% for i in page_obj.object_list %}
+            <div class="comment-item">
+                <div style="text-align: right; margin: -0.5rem 0rem;">
+                    <a href="#" class="delete-btn" data-comment-id="{{ i.pk }}" style="color: #999; ">
+                        <i class="fa-solid fa-xmark"></i>
+                    </a>
+                </div>
+
+                <div style="word-wrap: break-word; overflow-wrap: break-word;">{{ i.comment }}</div>
+                <span style="font-size:12px; color:gray">from. {{ i.writer }}</span>
+            </div>
+			{% endfor %}
+		</div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination">
+
+                <!-- 이전 버튼 -->
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+                {% else %}
+                    <a class="disabled">&lt;</a>
+                {% endif %}
+
+                <!-- 페이지 정보 -->
+                <span class="current">
+                    {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                </span>
+
+                <!-- 다음 버튼 -->
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+                {% else %}
+                    <a class="disabled">&gt;</a>
+                {% endif %}
+
+        </div>
+
+        <form action="{% url 'invitationapp:createComment' pk=pk %}" method="post">
+            {% csrf_token %}
+            <div class="accordion" id="accordionComment">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingComment">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseComment" aria-expanded="false" aria-controls="collapseComment">
+                        축하 메세지 작성하기 </button>
+                    </h2>
+                    <div id="collapseComment" class="accordion-collapse collapse" aria-labelledby="headingComment" data-bs-parent="#accordionComment">
+                        <div class="accordion-body">
+                            <div style="font-size:0.75rem">저희 둘의 결혼을 축하해 주세요.</div>
+                            <div class="input-group" style="padding: 0.5rem 0rem">
+                                <input class="form-control" type="text" name="comment_writer" placeholder="성함을 남겨주세요." >
+                                <input class="form-control" type="text" name="comment_password" placeholder="비밀번호를 입력해 주세요.">
+                            </div>
+                            <textarea class="form-control" id="comment" name="comment" style="padding: 0.5rem" rows="3" placeholder="축하 메세지를 입력하세요.(200자 이내)"></textarea>
+
+                            <button type="submit" id="comment-btn" class="comment-btn" style="width: 100%">
+                                <i class="fa-solid fa-pen-nib"></i>
+                                작성하기 </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 모달 -->
+<div id="password-modal" class="modal" style="display: none;">
+    <div class="modal-content comment-modal">
+        <span class="close-modal">&times;</span>
+        <h2>방명록 삭제</h2>
+        <form action="{% url 'invitationapp:deleteComment' pk=pk %}" method="post">
+            {% csrf_token %}
+            <label for="password">비밀번호:</label>
+            <input type="password" name="password" id="password" required>
+            <input type="hidden" name="comment_id" id="comment-id">
+            <button type="submit">삭제</button>
+        </form>
+    </div>
+</div>
+<script>
+        // 페이지 로드 시 스크롤 위치 복원
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollPosition = sessionStorage.getItem('scrollPosition');
+            if (scrollPosition) {
+                window.scrollTo(0, parseInt(scrollPosition, 10));
+            }
+        });
+
+        // 스크롤 이벤트에서 위치 저장
+        window.addEventListener('scroll', function () {
+            sessionStorage.setItem('scrollPosition', window.scrollY);
+        });
+    </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('password-modal');
+    const closeModal = document.querySelector('.close-modal');
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    const deleteForm = document.getElementById('delete-form');
+    const commentIdInput = document.getElementById('comment-id');
+
+    // 모달 열기
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            const commentId = button.getAttribute('data-comment-id');
+            commentIdInput.value = commentId; // 댓글 ID를 숨겨진 필드에 저장
+            modal.style.display = 'flex';
+        });
+    });
+
+    // 모달 닫기
+    closeModal.addEventListener('click', function () {
+        modal.style.display = 'none';
+    });
+
+    // 외부 영역 클릭 시 모달 닫기
+    window.addEventListener('click', function (event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
+</script>
+
+<style>
+.comment-list{
+    margin : 1rem 0rem;
+}
+.comment-item{
+    background: #FFF5F5;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 1rem;
+    margin : 1rem 0rem;
+    text-align:left;
+}
+.comment-btn {
+        margin-top: 0.5rem;
+        padding: 12px 16px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+}
+.comment-modal{
+    width : 100%;
+    max-width : 360px;
+    background: #FFF5F5;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 1rem;
+    margin : 1rem 0rem;
+    text-align:left;
+}
+.pagination {
+    margin: 20px 0;
+    display: flex; /* Flexbox 활성화 */
+    justify-content: space-between; /* 가운데 정렬 */
+    gap: 32px; /* 버튼 간격 조정 */
+}
+
+.pagination a {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    color: #555;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.pagination a:hover {
+    background-color: #f0f0f0;
+}
+
+/* 비활성화된 버튼 스타일 */
+.pagination a.disabled {
+    pointer-events: none; /* 클릭 방지 */
+    color: #999; /* 흐릿한 색상 */
+    border-color: #eee; /* 흐릿한 테두리 */
+    background-color: #f9f9f9;
+}
+</style>
